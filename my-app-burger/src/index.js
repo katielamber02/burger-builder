@@ -6,7 +6,10 @@ import registerServiceWorker from './registerServiceWorker';
 import MyApp from './MyApp';
 import './config.js'
 //import Test from './Test';
-import {BrowserRouter} from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
+import reducers from './reducers'
+import {composeWithDevTools} from 'redux-devtools-extension'
+import thunk from 'redux-thunk'
 
 import {
 
@@ -16,21 +19,26 @@ import {
 } from 'redux'
 
 const store = createStore(
-  ()=>{},
+  reducers,
   compose(
+    composeWithDevTools(
     applyMiddleware(
-      
+      thunk
     )
+    )
+    
   )
 )
-
+//window.devToolsExtension ? window.devToolsExtension() : f => f
+// const store = createStore(reducers, composeWithDevTools(
+//   applyMiddleware()
+// ))
+window.store=store
 ReactDOM.render(
-  <BrowserRouter>
-<Provider store={store}>
-        <MyApp />
-      </Provider>
-      </BrowserRouter>
-
-
-, document.getElementById('root'));
+  <Provider store={store}>
+    <BrowserRouter>
+      <MyApp />
+    </BrowserRouter>
+  </Provider>
+  , document.getElementById('root'));
 registerServiceWorker();
